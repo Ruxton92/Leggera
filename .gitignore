@@ -1,4 +1,5 @@
 *.pyc
 *.sql
 *.db
+*.db-journal
 *.map
