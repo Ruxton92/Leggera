@@ -19,8 +19,8 @@ session_opts = {
 }
 app = SessionMiddleware(app, session_opts)
 
-def main():
 
+def main():
     # Start the Bottle webapp, it's open for local network
     bottle.run(app=app, quiet=False, reloader=False, host="0.0.0.0", port="8080", debu=True)
 

@@ -29,7 +29,7 @@ def log_out():
 @bottle.route('/management/')
 def management_page():
     auth.require(role='admin', fail_redirect='/')
-    return bottle.template('./templates/admin_dasboard')
+    return bottle.template('./templates/admin_dasboard', username=auth.current_user.username)
 
 
 @bottle.route('/management/users/')
@@ -60,23 +60,35 @@ def login_success_redirect():
 
 @bottle.post('/ajax/users/create/')
 def create_user():
-    response.content_type = 'application/json'
-    # email = bottle.request.forms.get('email')
+    email = bottle.request.forms.get('email')
     password = bottle.request.forms.get('password')
     username = bottle.request.forms.get('username')
     role = bottle.request.forms.get('role')
-    ret = create_user_by_admin(username, password, role)
+    ret = create_user_by_admin(username, password, role, email)
     response.content_type = 'application/json'
     return dumps({"status": ret.get('ok')})
 
 
-@bottle.route('/ajax/create_user/error/')
-def create_user_error_redirect():
+@bottle.post('/ajax/users/delete/')
+def create_user():
+    username = bottle.request.forms.get('user')
+    response.content_type = 'application/json'
+    try:
+        auth.delete_user(username)
+        auth._store.connection.commit()
+        return dumps({"status": True})
+    except Exception, e:
+        print repr(e)
+        return dumps({"status": False})
+
+
+@bottle.route('/ajax/users/error/')
+def users_error_redirect():
     response.content_type = 'application/json'
     return dumps({"status": "error"})
 
 
-@bottle.route('/ajax/create_user/success/')
-def create_user_success_redirect():
+@bottle.route('/ajax/users/success/')
+def users_success_redirect():
     response.content_type = 'application/json'
     return dumps({"status": "success"})

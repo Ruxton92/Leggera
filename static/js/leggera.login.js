@@ -1,5 +1,6 @@
 $(document).ready(function(){
     $('#login-form #login-submit').click(function(){
+
        if (validate()) {
            $('#loading-modal').modal('show')
            $.post( '/ajax/login/login/', {
@@ -7,6 +8,7 @@ $(document).ready(function(){
                     pass: $('#login-pass').val()
                 },
                 function(response) {
+                    alert('111')
                     if (response.status == 'error') {
                         $('#alert-wrong-email').removeClass('hide');
                     }

@@ -11,10 +11,13 @@
         {{ !get('extra_css', '')}}
         <script type="text/javascript" src="/static/vendor/js/jquery-1.11.1.min.js"></script>
         <script type="text/javascript" src="/static/vendor/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/static/js/leggera.admin.js"></script>
         {{ !get('extra_js', '')}}
     </head>
     <body>
         % include('templates/navbar_admin')
         {{!base}}
+
+        % include('templates/modals')
     </body>
 </html>

@@ -72,3 +72,33 @@ body.login-page {
 #create-user-form .form-group.has-error .control-label {
     display: inline-block;
 }
+.user-block .username-title {
+    font-size: 20px;
+    line-height: 20px;
+    display: inline-block;
+    margin: 0;
+}
+.user-block .username-title + h3 {
+    line-height: 20px;
+}
+.user-block .username-title:hover, .user-block .username-title:active {
+    border-color: #2a6496;
+}
+.user-block .user-additional-info {
+    color: #666;
+}
+.user-block .user-controls a {
+    color: #333;
+    cursor: pointer;
+    -moz-transition: color 0.2s ease-in;
+    -ms-transition: color 0.2s ease-in;
+    -webkit-transition: color 0.2s ease-in;
+    -o-transition: color 0.2s ease-in;
+    transition: color 0.2s ease-in;
+}
+.user-block .open-settings:hover {
+    color: #5cb85c;
+}
+.user-block .delete-user:hover {
+    color: #d9534f;
+}
