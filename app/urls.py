@@ -46,6 +46,18 @@ def log_in():
     log_in_user(email, password)
 
 
+@bottle.post('/ajax/login/reset/')
+def log_in():
+    em = bottle.request.forms.get('email')
+    us = bottle.request.forms.get('username')
+    auth.send_password_reset_email(
+        username=us,
+        email_addr=em
+    )
+    auth._store.connection.commit()
+    return 'Please check your mailbox.'
+
+
 @bottle.route('/ajax/login/error/')
 def login_error_redirect():
     response.content_type = 'application/json'

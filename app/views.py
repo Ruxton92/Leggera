@@ -13,6 +13,8 @@ log = logging.getLogger(__name__)
 bottle.debug(True)
 
 db = SQLiteBackend('./leggeradb.db')
+# smtpurl = "smtp://smtp.magnet.ie"
+smtpurl = "starttls://<gmailusername>:<gmailapppass>@smtp.gmail.com:587"
 auth = Cork(backend=db, email_sender='artkon92@gmail.com', smtp_url=smtpurl)
 
 conn = sqlite3.connect('./leggeradb.db')
