@@ -18,16 +18,6 @@ $(document).ready(function(){
             $('#loading-modal').modal('hide')
         }
     });
-    $('#reset-password-form #reset-password').click(function(){
-       $.post( '/ajax/login/reset/', {
-                email: $('#reset-email').val(),
-                username: $('#reset-username').val()
-            },
-            function(response) {
-                console.debug(response)
-            }
-        )
-    });
 })
 
 function validate() {

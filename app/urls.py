@@ -26,6 +26,16 @@ def log_out():
     auth.logout(success_redirect='/login/')
 
 
+@bottle.route('/reset-password/')
+def reset_password_page():
+    return bottle.template('./templates/reset_password')
+
+
+@bottle.route('/change-password/<reset_code>/')
+def change_password_page(reset_code):
+    return bottle.template('./templates/change_password', code=reset_code)
+
+
 @bottle.route('/management/')
 def management_page():
     auth.require(role='admin', fail_redirect='/')
@@ -50,12 +60,31 @@ def log_in():
 def log_in():
     em = bottle.request.forms.get('email')
     us = bottle.request.forms.get('username')
-    auth.send_password_reset_email(
-        username=us,
-        email_addr=em
-    )
-    auth._store.connection.commit()
-    return 'Please check your mailbox.'
+    response.content_type = 'application/json'
+    try:
+        auth.send_password_reset_email(
+            username=us,
+            email_addr=em
+        )
+        auth._store.connection.commit()
+        return dumps({"status": True})
+    except Exception, e:
+        print repr(e)
+        return dumps({"status": False})
+
+
+@bottle.post('/ajax/login/change/')
+def log_in():
+    ps = bottle.request.forms.get('password')
+    cd = bottle.request.forms.get('reset_code')
+    response.content_type = 'application/json'
+    try:
+        auth.reset_password(cd, ps)
+        auth._store.connection.commit()
+        return dumps({"status": True})
+    except Exception, e:
+        print repr(e)
+        return dumps({"status": False})
 
 
 @bottle.route('/ajax/login/error/')
@@ -82,7 +111,7 @@ def create_user():
 
 
 @bottle.post('/ajax/users/delete/')
-def create_user():
+def delete_user():
     username = bottle.request.forms.get('user')
     response.content_type = 'application/json'
     try:
@@ -92,6 +121,15 @@ def create_user():
     except Exception, e:
         print repr(e)
         return dumps({"status": False})
+
+
+@bottle.post('/ajax/users/edit/')
+def edit_user():
+    username = bottle.request.forms.get('username')
+    email = bottle.request.forms.get('email')
+    role = bottle.request.forms.get('role')
+    response.content_type = 'application/json'
+    return edit_user_data(username, email, role)
 
 
 @bottle.route('/ajax/users/error/')

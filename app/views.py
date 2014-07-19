@@ -13,8 +13,7 @@ log = logging.getLogger(__name__)
 bottle.debug(True)
 
 db = SQLiteBackend('./leggeradb.db')
-# smtpurl = "smtp://smtp.magnet.ie"
-smtpurl = "starttls://<gmailusername>:<gmailapppass>@smtp.gmail.com:587"
+# smtpurl = "starttls://<gmailusername>:<gmailapppass>@smtp.gmail.com:587"
 auth = Cork(backend=db, email_sender='artkon92@gmail.com', smtp_url=smtpurl)
 
 conn = sqlite3.connect('./leggeradb.db')
@@ -28,14 +27,20 @@ def management_users_view():
     roles_arr = ['admin', 'editor']
     curr_user = auth.current_user.username
     curs = conn.cursor()
-    curs.execute("SELECT u.username, u.email_addr, r.role FROM users u NATURAL JOIN roles r WHERE u.username = ? OR r.level < (SELECT r.level FROM users u NATURAL JOIN roles r WHERE u.username = ? )", (curr_user, curr_user))
+    curs.execute("SELECT u.username, u.email_addr, r.role FROM users u NATURAL JOIN roles r WHERE u.username = ? OR r.level < (SELECT r.level FROM users u NATURAL JOIN roles r WHERE u.username = ? ) ORDER BY u.username ASC", (curr_user, curr_user))
     users_arr = curs.fetchall()
-    print users_arr
     return bottle.template('./templates/admin_users',
         roles=roles_arr,
         username=curr_user,
         users=users_arr
     )
+
+def edit_user_data(username, email, role):
+    response = {'status': True}
+    curs = conn.cursor()
+    curs.execute("UPDATE users SET email_addr = ?, role = ? WHERE username = ?", (email, role, username))
+    conn.commit()
+    return response
 
 
 def create_user_by_admin(username, password, role, email):

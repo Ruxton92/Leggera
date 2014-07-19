@@ -19,12 +19,8 @@
             <input id="login-pass" type="password" class="form-control" placeholder="Password" required>
             <button id="login-submit" class="btn btn-lg btn-success btn-block" type="submit">Sign in</button>
           </div>
-        </div>
-        <div class="container" id="reset-password-form">
-          <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
-            <input id="reset-email" type="email" class="form-control" placeholder="Email" value="artkon92@gmail.com">
-            <input id="reset-username" type="text" class="form-control" placeholder="Username" value="admin">
-            <button id="reset-password" class="btn btn-lg btn-success btn-block" type="submit">Reset</button>
+          <div style="text-align: center; margin-top: 10px;">
+            <a href="/reset-password/">I forgot my password</a>
           </div>
         </div>
         <div class="container">

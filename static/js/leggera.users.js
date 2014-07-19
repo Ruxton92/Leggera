@@ -35,12 +35,14 @@ $(document).ready(function(){
         var username = $(this).closest('.user-block').find('.username-title').data('username')
         user_settings_click(username)
     });
+    $('.open-settings').click(function(){$('#user-settings-modal *').removeClass('has-error')})
     $('#user-delete-sure').click(delete_user_sure);
     $('#user-settings-cancel').click(function(){
         $('#user-settings-modal').modal('hide')
         $('#user-settings-email, #user-settings-role').val('');
         $('#user-settings-username').text('')
     });
+    $('#user-settings-save').click(edit_user_save);
 })
 
 function validate_create_form() {
@@ -100,4 +102,55 @@ function delete_user_sure() {
         }
     )
 
+}
+
+function edit_user_save() {
+    if (validate_edit_form()) {
+        $.post( '/ajax/users/edit/', {
+                email: $('#user-settings-email').val(),
+                role: $('#user-settings-role').val(),
+                username: $('#user-settings-username').text(),
+            }, function(response) {
+                if (response.status) {
+                    var username = $('#user-settings-username').text()
+                    var ub = $('.username-title[data-username=' + username + ']').closest('.user-block')
+                    $(ub).find('.user-email').text($('#user-settings-email').val());
+                    $(ub).find('.user-role').text($('#user-settings-role').val());
+                    $('#user-settings-modal').modal('hide')
+                    $('#user-settings-email, #user-settings-role').val('');
+                    $('#user-settings-username').text('')
+                    show_message('User data was successfully changed', 3000)
+                }
+                else {
+                    $('#user-settings-modal').modal('hide')
+                    $('#user-settings-email, #user-settings-role').val('');
+                    $('#user-settings-username').text('')
+                    show_message('Something goes wrong, please, try again later', 5000)
+                }
+            }
+        )
+    }
+    else {
+
+    }
+}
+
+function validate_edit_form() {
+    var valid = true;
+    var email_regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (email_regex.test($('#user-settings-email').val())) {
+        $('#user-settings-email').parent().removeClass('has-error');
+    }
+    else {
+        $('#user-settings-email').parent().addClass('has-error');
+        valid = false;
+    }
+    if ($('#user-settings-role').val()) {
+        $('#user-settings-role').parent().removeClass('has-error');
+    }
+    else {
+        $('#user-settings-role').parent().addClass('has-error');
+        valid = false;
+    }
+    return valid;
 }
