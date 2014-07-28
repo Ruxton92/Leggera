@@ -7,8 +7,12 @@ from views import *
 
 @bottle.route('/static/<filepath:path>')
 def static_files(filepath):
-    print filepath
     return bottle.static_file(filepath, root='./static/')
+
+
+@bottle.route('/uploads/<filepath:path>')
+def upload_static_files(filepath):
+    return bottle.static_file(filepath, root='./uploads/')
 
 
 @bottle.route('/')
@@ -46,6 +50,12 @@ def management_page():
 def management_users_page():
     auth.require(role='admin', fail_redirect='/')
     return management_users_view()
+
+
+@bottle.route('/management/files/')
+def management_files_page():
+    auth.require(role='admin', fail_redirect='/')
+    return management_files_view()
 
 
 # AJAX requests

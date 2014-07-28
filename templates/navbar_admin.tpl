@@ -13,6 +13,7 @@
       <ul class="nav navbar-nav">
         <li class="active"><a href="/management/">Dashboard</a></li>
         <li><a href="/management/users/">Users</a></li>
+        <li><a href="/management/files/">Files</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">

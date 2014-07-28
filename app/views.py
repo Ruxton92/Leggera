@@ -3,6 +3,8 @@
 import sqlite3
 import bottle
 import os.path
+from os.path import isfile, join, splitext
+from os import listdir
 from cork import Cork
 from cork.backends import SQLiteBackend
 from beaker.middleware import SessionMiddleware
@@ -34,6 +36,26 @@ def management_users_view():
         username=curr_user,
         users=users_arr
     )
+
+
+def management_files_view():
+    curr_user = auth.current_user.username
+    root_path = os.path.dirname(os.path.abspath(__file__))
+    uploads_path = os.path.abspath(os.path.join(root_path, '..', 'uploads'))
+    only_files = [ f for f in listdir(uploads_path) if isfile(join(uploads_path,f)) ]
+    files_arr = []
+    for f in only_files:
+        files_arr.append(
+                {
+                    'extension': splitext(f)[1],
+                    'name': f
+                }
+            )
+    return bottle.template('./templates/admin_files',
+       username=curr_user,
+       files=files_arr
+    )
+
 
 def edit_user_data(username, email, role):
     response = {'status': True}
