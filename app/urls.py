@@ -152,3 +152,16 @@ def users_error_redirect():
 def users_success_redirect():
     response.content_type = 'application/json'
     return dumps({"status": "success"})
+
+
+@bottle.post('/ajax/files/refresh/')
+def refresh_files_list():
+    response.content_type = 'application/json'
+    return dumps({"files": get_list_of_uploads()})
+
+
+@bottle.post('/ajax/files/delete/')
+def delete_upload():
+    filename = bottle.request.forms.get('file')
+    response.content_type = 'application/json'
+    return dumps({"status": delete_upload_file(filename)})

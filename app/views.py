@@ -40,20 +40,9 @@ def management_users_view():
 
 def management_files_view():
     curr_user = auth.current_user.username
-    root_path = os.path.dirname(os.path.abspath(__file__))
-    uploads_path = os.path.abspath(os.path.join(root_path, '..', 'uploads'))
-    only_files = [ f for f in listdir(uploads_path) if isfile(join(uploads_path,f)) ]
-    files_arr = []
-    for f in only_files:
-        files_arr.append(
-                {
-                    'extension': splitext(f)[1],
-                    'name': f
-                }
-            )
     return bottle.template('./templates/admin_files',
        username=curr_user,
-       files=files_arr
+       files=get_list_of_uploads()
     )
 
 
@@ -72,3 +61,30 @@ def create_user_by_admin(username, password, role, email):
         return dict(ok=True, msg='')
     except Exception, e:
         return dict(ok=False, msg=e.message)
+
+
+def get_list_of_uploads():
+    root_path = os.path.dirname(os.path.abspath(__file__))
+    uploads_path = os.path.abspath(os.path.join(root_path, '..', 'uploads'))
+    only_files = [ f for f in listdir(uploads_path) if isfile(join(uploads_path,f)) ]
+    only_files.sort()
+    files_arr = []
+    for f in only_files:
+        files_arr.append(
+                {
+                    'extension': splitext(f)[1],
+                    'name': f
+                }
+            )
+    return files_arr
+
+
+def delete_upload_file(filename):
+    if filename:
+        root_path = os.path.dirname(os.path.abspath(__file__))
+        uploads_path = os.path.abspath(os.path.join(root_path, '..', 'uploads'))
+        print uploads_path
+        os.remove("{}/{}".format(uploads_path, filename))
+        return True
+    else:
+        return False

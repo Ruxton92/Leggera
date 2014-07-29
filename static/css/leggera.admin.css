@@ -4,6 +4,14 @@ body {
 body.login-page {
     background: #eee;
 }
+a.local {
+    text-decoration: none;
+    border-bottom: 1px dotted #428bca;
+}
+a.local:hover, a.local:focus {
+    border-color: #428bca;
+    cursor: pointer;
+}
 .navbar-inverse {
     background-color: #222;
     border-color: #080808;
@@ -105,4 +113,44 @@ body.login-page {
 }
 .user-block .delete-user:hover {
     color: #d9534f;
+}
+#all-files-wrapper {
+    max-height: 500px;
+    overflow-y: auto;
+    margin-top: 15px;
+}
+#all-files-list {
+
+}
+#all-files-list .file-block .file-item {
+    display: inline-block;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 16px;
+}
+#all-files-list .file-block .file-item span {
+    border-bottom: 1px dotted #428bca;
+}
+#all-files-list .file-block .file-item:hover, #all-files-list .file-block .file-item:focus {
+    border-color: #428bca;
+    cursor: pointer;
+}
+#all-files-list .file-block .file-direct-link, #all-files-list .file-block .file-remove {
+    color: #333;
+    cursor: pointer;
+    font-style: 14px;
+    -moz-transition: color 0.2s ease-in;
+    -ms-transition: color 0.2s ease-in;
+    -webkit-transition: color 0.2s ease-in;
+    -o-transition: color 0.2s ease-in;
+    transition: color 0.2s ease-in;
+}
+#all-files-list .file-block .file-direct-link:hover {
+    color: #428bca;
+}
+#all-files-list .file-block .file-remove:hover {
+    color: #d9534f;
+}
+#preview-picture {
+    width: 100%;
 }
