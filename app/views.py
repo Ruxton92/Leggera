@@ -88,3 +88,11 @@ def delete_upload_file(filename):
         return True
     else:
         return False
+
+
+def save_upload_file(upload):
+    root_path = os.path.dirname(os.path.abspath(__file__))
+    uploads_path = os.path.abspath(os.path.join(root_path, '..', 'uploads'))
+    with open(os.path.join(uploads_path, upload.filename), 'wb') as tmp_file:
+        tmp_file.write(upload.file.read())
+    return True

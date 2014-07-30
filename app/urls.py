@@ -165,3 +165,9 @@ def delete_upload():
     filename = bottle.request.forms.get('file')
     response.content_type = 'application/json'
     return dumps({"status": delete_upload_file(filename)})
+
+
+@bottle.post('/ajax/files/upload/')
+def upload_file():
+    response.content_type = 'application/json'
+    return dumps({"status": save_upload_file(bottle.request.files.upload)})

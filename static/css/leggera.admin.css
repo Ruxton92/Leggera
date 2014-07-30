@@ -154,3 +154,35 @@ a.local:hover, a.local:focus {
 #preview-picture {
     width: 100%;
 }
+#files-refresh.active .glyphicon {
+    animation: rotate .5s infinite linear;
+    -moz-animation: rotate .5s infinite linear;
+    -webkit-animation: rotate .5s infinite linear;
+}
+@-moz-keyframes rotate {
+    0% { -moz-transform: rotate(0deg); }
+    100% { -moz-transform: rotate(360deg); };
+}
+
+@-webkit-keyframes rotate {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); };
+}
+#files-actions-block form {
+    display: inline-block;
+}
+#files-upload {
+    position: relative;
+    overflow: hidden;
+}
+#files-upload input {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    opacity: 0;
+    -ms-filter: 'alpha(opacity=0)';
+    font-size: 200px;
+    direction: ltr;
+    cursor: pointer;
+}
