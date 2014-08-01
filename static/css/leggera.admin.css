@@ -138,12 +138,13 @@ a.local:hover, a.local:focus {
 #all-files-list .file-block .file-direct-link, #all-files-list .file-block .file-remove {
     color: #333;
     cursor: pointer;
-    font-style: 14px;
+    font-size: 14px;
     -moz-transition: color 0.2s ease-in;
     -ms-transition: color 0.2s ease-in;
     -webkit-transition: color 0.2s ease-in;
     -o-transition: color 0.2s ease-in;
     transition: color 0.2s ease-in;
+    text-decoration: none;
 }
 #all-files-list .file-block .file-direct-link:hover {
     color: #428bca;
@@ -185,4 +186,24 @@ a.local:hover, a.local:focus {
     font-size: 200px;
     direction: ltr;
     cursor: pointer;
+}
+.block-block .block-edit-link, .block-block .block-remove {
+    color: #333;
+    cursor: pointer;
+    font-size: 14px;
+    -moz-transition: color 0.2s ease-in;
+    -ms-transition: color 0.2s ease-in;
+    -webkit-transition: color 0.2s ease-in;
+    -o-transition: color 0.2s ease-in;
+    transition: color 0.2s ease-in;
+    text-decoration: none;
+}
+.block-block .block-edit-link:hover {
+    color: #428bca;
+}
+.block-block .block-remove:hover {
+    color: #d9534f;
+}
+#create-new-block {
+
 }

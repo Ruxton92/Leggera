@@ -42,7 +42,7 @@ def change_password_page(reset_code):
 
 @bottle.route('/management/')
 def management_page():
-    auth.require(role='admin', fail_redirect='/')
+    auth.require(role='editor', fail_redirect='/')
     return bottle.template('./templates/admin_dasboard', username=auth.current_user.username)
 
 
@@ -52,9 +52,15 @@ def management_users_page():
     return management_users_view()
 
 
+@bottle.route('/management/content/')
+def management_content_page():
+    auth.require(role='editor', fail_redirect='/')
+    return management_content_view()
+
+
 @bottle.route('/management/files/')
 def management_files_page():
-    auth.require(role='admin', fail_redirect='/')
+    auth.require(role='editor', fail_redirect='/')
     return management_files_view()
 
 
@@ -171,3 +177,10 @@ def delete_upload():
 def upload_file():
     response.content_type = 'application/json'
     return dumps({"status": save_upload_file(bottle.request.files.upload)})
+
+
+@bottle.post('/ajax/content/save_weights/')
+def save_weights():
+    save_blocks_weights(bottle.request.forms.get('weights'))
+    response.content_type = 'application/json'
+    return dumps({"status": True})

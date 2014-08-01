@@ -12,6 +12,7 @@
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
         <li class="active"><a href="/management/">Dashboard</a></li>
+        <li><a href="/management/content/">Content</a></li>
         <li><a href="/management/users/">Users</a></li>
         <li><a href="/management/files/">Files</a></li>
       </ul>

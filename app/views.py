@@ -9,6 +9,8 @@ from cork import Cork
 from cork.backends import SQLiteBackend
 from beaker.middleware import SessionMiddleware
 import logging
+import json
+from models import ContentBlock
 
 logging.basicConfig(format='localhost - - [%(asctime)s] %(message)s', level=logging.DEBUG)
 log = logging.getLogger(__name__)
@@ -35,6 +37,14 @@ def management_users_view():
         roles=roles_arr,
         username=curr_user,
         users=users_arr
+    )
+
+
+def management_content_view():
+    curr_user = auth.current_user.username
+    return bottle.template('./templates/admin_content',
+        username=curr_user,
+        blocks = get_content_blocks()
     )
 
 
@@ -70,8 +80,7 @@ def get_list_of_uploads():
     only_files.sort()
     files_arr = []
     for f in only_files:
-        files_arr.append(
-                {
+        files_arr.append({
                     'extension': splitext(f)[1],
                     'name': f
                 }
@@ -96,3 +105,22 @@ def save_upload_file(upload):
     with open(os.path.join(uploads_path, upload.filename), 'wb') as tmp_file:
         tmp_file.write(upload.file.read())
     return True
+
+
+def get_content_blocks():
+    curs = conn.cursor()
+    curs.execute("SELECT id, title FROM content_blocks WHERE category = 'block' ORDER BY weight ASC")
+    blocks_arr = curs.fetchall()
+    print blocks_arr
+    return blocks_arr
+
+
+def save_blocks_weights(weights):
+    wj = json.loads(weights)
+    for w in wj:
+        id = w.keys()[0]
+        weight = w[w.keys()[0]]
+        print "id: {}, weight: {}".format(id, weight)
+        curs.execute("UPDATE content_blocks SET weight = ? WHERE id = ?", (id, weight))
+        conn.commit()
+
