@@ -58,6 +58,12 @@ def management_content_page():
     return management_content_view()
 
 
+@bottle.route('/management/content/edit/<section_id>/')
+def management_content_edit(section_id):
+    auth.require(role='editor', fail_redirect='/')
+    return management_section_edit(section_id, bottle.request.query_string)
+
+
 @bottle.route('/management/files/')
 def management_files_page():
     auth.require(role='editor', fail_redirect='/')

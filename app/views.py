@@ -11,6 +11,7 @@ from beaker.middleware import SessionMiddleware
 import logging
 import json
 from models import ContentBlock
+from urlparse import urlparse
 
 logging.basicConfig(format='localhost - - [%(asctime)s] %(message)s', level=logging.DEBUG)
 log = logging.getLogger(__name__)
@@ -42,9 +43,15 @@ def management_users_view():
 
 def management_content_view():
     curr_user = auth.current_user.username
+    curs.execute("SELECT id FROM content_blocks WHERE category = 'header'")
+    header_id = curs.fetchall()
+    curs.execute("SELECT id FROM content_blocks WHERE category = 'footer'")
+    footer_id = curs.fetchall()
     return bottle.template('./templates/admin_content',
         username=curr_user,
-        blocks = get_content_blocks()
+        blocks = get_content_blocks(),
+        header_id = header_id,
+        footer_id = footer_id,
     )
 
 
@@ -111,7 +118,6 @@ def get_content_blocks():
     curs = conn.cursor()
     curs.execute("SELECT id, title FROM content_blocks WHERE category = 'block' ORDER BY weight ASC")
     blocks_arr = curs.fetchall()
-    print blocks_arr
     return blocks_arr
 
 
@@ -120,7 +126,26 @@ def save_blocks_weights(weights):
     for w in wj:
         id = w.keys()[0]
         weight = w[w.keys()[0]]
-        print "id: {}, weight: {}".format(id, weight)
         curs.execute("UPDATE content_blocks SET weight = ? WHERE id = ?", (id, weight))
         conn.commit()
+
+def management_section_edit(section_id, args):
+    curr_user = auth.current_user.username
+    print 'section_id={}'.format(section_id)
+    if int(section_id) > 0:
+        print 's1'
+        cb = ContentBlock.get_by_id(section_id)
+    else:
+        print 's2'
+        cb = ContentBlock()
+        cb.cid = 0
+        cb.title = 'New block'
+        cb.content = ''
+        cb.category = args if args else 'block'
+        cb.weight = 1
+    return bottle.template('./templates/admin_content_detail',
+        username=curr_user,
+        block = cb
+    )
+
 
