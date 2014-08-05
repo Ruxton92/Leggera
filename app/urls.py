@@ -190,3 +190,10 @@ def save_weights():
     save_blocks_weights(bottle.request.forms.get('weights'))
     response.content_type = 'application/json'
     return dumps({"status": True})
+
+
+@bottle.post('/ajax/content/save_block/')
+def save_block():
+    ret = save_content_block(bottle.request.forms.get('form'))
+    response.content_type = 'application/json'
+    return dumps({"status": ret})

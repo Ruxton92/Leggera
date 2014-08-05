@@ -207,3 +207,8 @@ a.local:hover, a.local:focus {
 #create-new-block {
 
 }
+#block-content {
+    resize: vertical;
+    min-width: 100%;
+    min-height: 300px;
+}

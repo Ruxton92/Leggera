@@ -148,4 +148,20 @@ def management_section_edit(section_id, args):
         block = cb
     )
 
+def save_content_block(form):
+    print form
+    cb = ContentBlock()
+    for b in json.loads(form):
+        if b.get('name') == 'cid':
+            cb.cid = b.get('value')
+        elif b.get('name') == 'title':
+            cb.title = b.get('value')
+        elif b.get('name') == 'weight':
+            cb.weight = b.get('value')
+        elif b.get('name') == 'category':
+            cb.category = b.get('value')
+        elif b.get('name') == 'content':
+            cb.content = b.get('value')
+    print cb
+    return True
 
