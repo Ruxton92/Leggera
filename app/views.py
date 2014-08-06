@@ -24,6 +24,16 @@ auth = Cork(backend=db, email_sender='artkon92@gmail.com', smtp_url=smtpurl)
 conn = sqlite3.connect('./leggeradb.db')
 curs = conn.cursor()
 
+
+# Database operations
+def get_cursor():
+    return curs
+
+def commit_connection():
+    conn.commit()
+
+
+# Views
 def log_in_user(email, password):
     res = auth.login(email, password, success_redirect='/ajax/login/success/', fail_redirect='/ajax/login/error/')
 
@@ -99,7 +109,6 @@ def delete_upload_file(filename):
     if filename:
         root_path = os.path.dirname(os.path.abspath(__file__))
         uploads_path = os.path.abspath(os.path.join(root_path, '..', 'uploads'))
-        print uploads_path
         os.remove("{}/{}".format(uploads_path, filename))
         return True
     else:
@@ -129,14 +138,12 @@ def save_blocks_weights(weights):
         curs.execute("UPDATE content_blocks SET weight = ? WHERE id = ?", (id, weight))
         conn.commit()
 
+
 def management_section_edit(section_id, args):
     curr_user = auth.current_user.username
-    print 'section_id={}'.format(section_id)
     if int(section_id) > 0:
-        print 's1'
-        cb = ContentBlock.get_by_id(section_id)
+        cb = ContentBlock.get_by_id(int(section_id))
     else:
-        print 's2'
         cb = ContentBlock()
         cb.cid = 0
         cb.title = 'New block'
@@ -148,20 +155,19 @@ def management_section_edit(section_id, args):
         block = cb
     )
 
+
 def save_content_block(form):
-    print form
     cb = ContentBlock()
     for b in json.loads(form):
         if b.get('name') == 'cid':
-            cb.cid = b.get('value')
+            cb.cid = int(b.get('value'))
         elif b.get('name') == 'title':
             cb.title = b.get('value')
         elif b.get('name') == 'weight':
-            cb.weight = b.get('value')
+            cb.weight = int(b.get('value'))
         elif b.get('name') == 'category':
             cb.category = b.get('value')
         elif b.get('name') == 'content':
             cb.content = b.get('value')
-    print cb
-    return True
+    return cb.save()
 

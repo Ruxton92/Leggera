@@ -7,6 +7,8 @@ from cork.backends import SQLiteBackend
 from beaker.middleware import SessionMiddleware
 
 import app.urls
+import app.models
+import app.views
 
 app = bottle.app()
 session_opts = {
@@ -22,7 +24,7 @@ app = SessionMiddleware(app, session_opts)
 
 def main():
     # Start the Bottle webapp, it's open for local network
-    bottle.run(app=app, quiet=False, reloader=False, host="0.0.0.0", port="8080", debu=True)
+    bottle.run(app=app, quiet=False, reloader=False, host="0.0.0.0", port="8080", debug=True)
 
 
 if __name__ == "__main__":
