@@ -10,7 +10,7 @@ from cork.backends import SQLiteBackend
 from beaker.middleware import SessionMiddleware
 import logging
 import json
-from models import ContentBlock
+from models import ContentBlock, SQLbackend
 from urlparse import urlparse
 
 logging.basicConfig(format='localhost - - [%(asctime)s] %(message)s', level=logging.DEBUG)
@@ -21,17 +21,6 @@ db = SQLiteBackend('./leggeradb.db')
 # smtpurl = "starttls://<gmailusername>:<gmailapppass>@smtp.gmail.com:587"
 auth = Cork(backend=db, email_sender='artkon92@gmail.com', smtp_url=smtpurl)
 
-conn = sqlite3.connect('./leggeradb.db')
-curs = conn.cursor()
-
-
-# Database operations
-def get_cursor():
-    return curs
-
-def commit_connection():
-    conn.commit()
-
 
 # Views
 def log_in_user(email, password):
@@ -41,9 +30,11 @@ def log_in_user(email, password):
 def management_users_view():
     roles_arr = ['admin', 'editor']
     curr_user = auth.current_user.username
-    curs = conn.cursor()
+    sql = SQLbackend()
+    curs = sql.get_cursor()
     curs.execute("SELECT u.username, u.email_addr, r.role FROM users u NATURAL JOIN roles r WHERE u.username = ? OR r.level < (SELECT r.level FROM users u NATURAL JOIN roles r WHERE u.username = ? ) ORDER BY u.username ASC", (curr_user, curr_user))
     users_arr = curs.fetchall()
+    sql.close_connection()
     return bottle.template('./templates/admin_users',
         roles=roles_arr,
         username=curr_user,
@@ -53,10 +44,13 @@ def management_users_view():
 
 def management_content_view():
     curr_user = auth.current_user.username
+    sql = SQLbackend()
+    curs = sql.get_cursor()
     curs.execute("SELECT id FROM content_blocks WHERE category = 'header'")
     header_id = curs.fetchall()
     curs.execute("SELECT id FROM content_blocks WHERE category = 'footer'")
     footer_id = curs.fetchall()
+    sql.close_connection()
     return bottle.template('./templates/admin_content',
         username=curr_user,
         blocks = get_content_blocks(),
@@ -75,9 +69,10 @@ def management_files_view():
 
 def edit_user_data(username, email, role):
     response = {'status': True}
-    curs = conn.cursor()
+    sql = SQLbackend()
+    curs = sql.get_cursor()
     curs.execute("UPDATE users SET email_addr = ?, role = ? WHERE username = ?", (email, role, username))
-    conn.commit()
+    sql.close_connection()
     return response
 
 
@@ -124,19 +119,24 @@ def save_upload_file(upload):
 
 
 def get_content_blocks():
-    curs = conn.cursor()
+    sql = SQLbackend()
+    curs = sql.get_cursor()
     curs.execute("SELECT id, title FROM content_blocks WHERE category = 'block' ORDER BY weight ASC")
     blocks_arr = curs.fetchall()
+    sql.close_connection()
     return blocks_arr
 
 
 def save_blocks_weights(weights):
     wj = json.loads(weights)
+    sql = SQLbackend()
+    curs = sql.get_cursor()
     for w in wj:
         id = w.keys()[0]
         weight = w[w.keys()[0]]
         curs.execute("UPDATE content_blocks SET weight = ? WHERE id = ?", (id, weight))
-        conn.commit()
+        sql.commit()
+    sql.close_connection()
 
 
 def management_section_edit(section_id, args):
