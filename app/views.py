@@ -46,9 +46,9 @@ def management_content_view():
     curr_user = auth.current_user.username
     sql = SQLbackend()
     curs = sql.get_cursor()
-    curs.execute("SELECT id FROM content_blocks WHERE category = 'header'")
+    curs.execute("SELECT id, title FROM content_blocks WHERE category = 'header'")
     header_id = curs.fetchall()
-    curs.execute("SELECT id FROM content_blocks WHERE category = 'footer'")
+    curs.execute("SELECT id, title FROM content_blocks WHERE category = 'footer'")
     footer_id = curs.fetchall()
     sql.close_connection()
     return bottle.template('./templates/admin_content',
@@ -171,3 +171,14 @@ def save_content_block(form):
             cb.content = b.get('value')
     return cb.save()
 
+
+def delete_content_block(cid):
+    ret = True
+    cb = ContentBlock.get_by_id(cid)
+    if cb:
+        cb.delete()
+    else:
+        ret = False
+    if cb.category in ['header', 'footer']:
+        ret = {'reload': True}
+    return ret

@@ -197,3 +197,11 @@ def save_block():
     ret = save_content_block(bottle.request.forms.get('form'))
     response.content_type = 'application/json'
     return dumps({"status": ret})
+
+
+@bottle.post('/ajax/content/delte_block/')
+def delete_block():
+    cid = bottle.request.forms.get('id')
+    ret = delete_content_block(cid)
+    response.content_type = 'application/json'
+    return dumps({"status": ret})
