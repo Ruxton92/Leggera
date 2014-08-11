@@ -5,6 +5,7 @@ from bottle import response
 from json import dumps
 from views import *
 
+
 @bottle.route('/static/<filepath:path>')
 def static_files(filepath):
     return bottle.static_file(filepath, root='./static/')
@@ -43,7 +44,7 @@ def change_password_page(reset_code):
 @bottle.route('/management/')
 def management_page():
     auth.require(role='editor', fail_redirect='/')
-    return bottle.template('./templates/admin_dasboard', username=auth.current_user.username)
+    return bottle.template('./templates/admin_dasboard', username=auth.current_user.username, pathname=bottle.request.path,)
 
 
 @bottle.route('/management/users/')

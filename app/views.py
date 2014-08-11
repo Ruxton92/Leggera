@@ -38,6 +38,7 @@ def management_users_view():
     return bottle.template('./templates/admin_users',
         roles=roles_arr,
         username=curr_user,
+        pathname=bottle.request.path,
         users=users_arr
     )
 
@@ -53,6 +54,7 @@ def management_content_view():
     sql.close_connection()
     return bottle.template('./templates/admin_content',
         username=curr_user,
+        pathname=bottle.request.path,
         blocks = get_content_blocks(),
         header_id = header_id,
         footer_id = footer_id,
@@ -63,6 +65,7 @@ def management_files_view():
     curr_user = auth.current_user.username
     return bottle.template('./templates/admin_files',
        username=curr_user,
+       pathname=bottle.request.path,
        files=get_list_of_uploads()
     )
 
@@ -164,6 +167,7 @@ def management_section_edit(section_id, args):
         cb.weight = 1
     return bottle.template('./templates/admin_content_detail',
         username=curr_user,
+        pathname=bottle.request.path,
         block = cb
     )
 

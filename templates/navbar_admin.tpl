@@ -7,14 +7,30 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">Leggera</a>
+      <a class="navbar-brand" href="/management/">Leggera</a>
     </div>
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="/management/">Dashboard</a></li>
-        <li><a href="/management/content/">Content</a></li>
-        <li><a href="/management/users/">Users</a></li>
-        <li><a href="/management/files/">Files</a></li>
+        %if pathname == '/management/':
+          <li class="active"><a href="#">Dashboard</a></li>
+        %else:
+          <li><a href="/management/">Dashboard</a></li>
+        %end
+        %if pathname.startswith('/management/content/'):
+          <li class="active"><a href="">Content</a></li>
+        %else:
+          <li><a href="/management/content/">Content</a></li>
+        %end
+        %if pathname == '/management/users/':
+          <li class="active"><a href="#">Users</a></li>
+        %else:
+          <li><a href="/management/users/">Users</a></li>
+        %end
+        %if pathname == '/management/files/':
+          <li class="active"><a href="#">Files</a></li>
+        %else:
+          <li><a href="/management/files/">Files</a></li>
+        %end
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
