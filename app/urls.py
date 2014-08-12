@@ -183,7 +183,8 @@ def delete_upload():
 @bottle.post('/ajax/files/upload/')
 def upload_file():
     response.content_type = 'application/json'
-    return dumps({"status": save_upload_file(bottle.request.files.upload)})
+    upl = bottle.request.files[bottle.request.files.keys()[0]]
+    return dumps({"status": save_upload_file(upl)})
 
 
 @bottle.post('/ajax/content/save_weights/')

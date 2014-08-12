@@ -120,14 +120,14 @@ def save_upload_file(upload):
     if upload.filename in only_files:
         cnt = 1
         while True:
-            print 'cnt before: {}'.format(cnt)
+            # print 'cnt before: {}'.format(cnt)
             fn, fe = os.path.splitext(upload.filename)
             if not (fn + str('_{}'.format(cnt)) + fe) in only_files:
                 upload.filename = fn + str('_{}'.format(cnt)) + fe
                 break
             else:
                 cnt += 1
-                print 'cnt after: {}'.format(cnt)
+                # print 'cnt after: {}'.format(cnt)
     with open(os.path.join(uploads_path, upload.filename), 'wb') as tmp_file:
         tmp_file.write(upload.file.read())
     return True
