@@ -19,10 +19,18 @@ bottle.debug(True)
 
 db = SQLiteBackend('./leggeradb.db')
 # smtpurl = "starttls://<gmailusername>:<gmailapppass>@smtp.gmail.com:587"
+smtpurl = "starttls://artkon92:pxthtqrmpjwvzpmj@smtp.gmail.com:587"
 auth = Cork(backend=db, email_sender='artkon92@gmail.com', smtp_url=smtpurl)
 
 
 # Views
+def render_index_page():
+    return bottle.template('./templates/index',
+        header = ContentBlock.get_header(),
+        footer = ContentBlock.get_footer(),
+        blocks = ContentBlock.get_blocks()
+    )
+
 def log_in_user(email, password):
     res = auth.login(email, password, success_redirect='/ajax/login/success/', fail_redirect='/ajax/login/error/')
 

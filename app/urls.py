@@ -18,7 +18,7 @@ def upload_static_files(filepath):
 
 @bottle.route('/')
 def index():
-    return bottle.template('./templates/index')
+    return render_index_page()
 
 
 @bottle.route('/login/')

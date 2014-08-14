@@ -17,7 +17,7 @@
           <li><a href="/management/">Dashboard</a></li>
         %end
         %if pathname.startswith('/management/content/'):
-          <li class="active"><a href="">Content</a></li>
+          <li class="active"><a href="/management/content/">Content</a></li>
         %else:
           <li><a href="/management/content/">Content</a></li>
         %end

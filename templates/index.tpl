@@ -1,14 +1,36 @@
 % rebase('templates/layout.tpl')
 % title='Leggera - Index page'
+% include('templates/navbar')
+
+% if header:
+    <header id="leggera-main-header" class="container-fluid">
+        <div class="container">
+            {{ !header.content }}
+        </div>
+    </header>
+% end
+
 <div class="container">
-
-  <div class="starter-template">
-    <h1>Bootstrap starter template</h1>
-    <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
-  </div>
-
+    % if blocks:
+        % for b in blocks:
+            <div class="row">
+                <div id="{{ b.anchor() }}" class="col-xs-12 col-md-12">
+                    <h2>{{ b.title }}</h2>
+                    {{ !b.content }}
+                </div>
+            </div>
+        %end
+    % end
 </div>
 
-% extra_js = '''
+% if footer:
+<footer id="leggera-main-footer" class="container-fluid">
+    <div class="container">
+        {{ !footer.content }}
+    </div>
+</footer>
+% end
 
+% extra_js = '''
+    <script type="text/javascript" src="/static/js/leggera.index.js"></script>
 '''

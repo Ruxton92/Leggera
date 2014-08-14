@@ -14,7 +14,6 @@
         {{ !get('extra_js', '')}}
     </head>
     <body>
-        % include('templates/navbar')
         {{!base}}
     </body>
 </html>
