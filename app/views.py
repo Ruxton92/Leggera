@@ -9,6 +9,7 @@ from cork import Cork
 from cork.backends import SQLiteBackend
 from beaker.middleware import SessionMiddleware
 import logging
+from settings import base
 import json
 from models import ContentBlock, SQLbackend
 from urlparse import urlparse
@@ -17,10 +18,8 @@ logging.basicConfig(format='localhost - - [%(asctime)s] %(message)s', level=logg
 log = logging.getLogger(__name__)
 bottle.debug(True)
 
-db = SQLiteBackend('./leggeradb.db')
-# smtpurl = "starttls://<gmailusername>:<gmailapppass>@smtp.gmail.com:587"
-smtpurl = "starttls://artkon92:pxthtqrmpjwvzpmj@smtp.gmail.com:587"
-auth = Cork(backend=db, email_sender='artkon92@gmail.com', smtp_url=smtpurl)
+db = SQLiteBackend(base.db_name)
+auth = Cork(backend=db, email_sender=base.smtpsender, smtp_url=base.smtpurl)
 
 
 # Views
@@ -97,8 +96,7 @@ def create_user_by_admin(username, password, role, email):
 
 
 def get_list_of_uploads():
-    root_path = os.path.dirname(os.path.abspath(__file__))
-    uploads_path = os.path.abspath(os.path.join(root_path, '..', 'uploads'))
+    uploads_path = os.path.abspath(os.path.join(base.root_path, 'uploads'))
     only_files = [ f for f in listdir(uploads_path) if isfile(join(uploads_path,f)) ]
     only_files.sort()
     files_arr = []
@@ -113,8 +111,7 @@ def get_list_of_uploads():
 
 def delete_upload_file(filename):
     if filename:
-        root_path = os.path.dirname(os.path.abspath(__file__))
-        uploads_path = os.path.abspath(os.path.join(root_path, '..', 'uploads'))
+        uploads_path = os.path.abspath(os.path.join(base.root_path, 'uploads'))
         os.remove("{}/{}".format(uploads_path, filename))
         return True
     else:
@@ -122,8 +119,7 @@ def delete_upload_file(filename):
 
 
 def save_upload_file(upload):
-    root_path = os.path.dirname(os.path.abspath(__file__))
-    uploads_path = os.path.abspath(os.path.join(root_path, '..', 'uploads'))
+    uploads_path = os.path.abspath(os.path.join(base.root_path, 'uploads'))
     only_files = [ f for f in listdir(uploads_path) if isfile(join(uploads_path,f)) ]
     if upload.filename in only_files:
         cnt = 1

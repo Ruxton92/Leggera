@@ -16,7 +16,7 @@ body {
     font-weight: 300;
 }
 #leggera-main-header {
-    background: url('/static/images/leggera-header-backg.png') left bottom no-repeat;
+    background: url('/static/images/leggera-header-backg.png') left bottom fixed;
     background-size: 100%;
     padding: 50px 0;
 }
@@ -43,4 +43,8 @@ body {
 #leggera-main-footer {
     background: #aaa;
     color: #000;
+}
+#leggera-main-footer .footer-main-text {
+    text-align: center;
+    margin: 0;
 }
